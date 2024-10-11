@@ -2,15 +2,36 @@
 
 document.addEventListener('DOMContentLoaded', () => {
   const getCellValue = (row, index) => {
-    return row.children[index].innerText || row.children[index].textContent;
+    if (row.children[index].innerText !== undefined) {
+      return row.children[index].innerText;
+    } else {
+      return row.children[index].textContent;
+    }
   };
 
   const ascOrder = (index) => (rowA, rowB) => {
     const valueA = getCellValue(rowA, index);
     const valueB = getCellValue(rowB, index);
 
-    const numA = Number(valueA);
-    const numB = Number(valueB);
+    let numberA;
+    let numberB;
+
+    if (valueA.charCodeAt(0) === 36) {
+      const arrA = Array.from(valueA);
+      const arrB = Array.from(valueB);
+
+      arrA.shift();
+      arrB.shift();
+
+      numberA = arrA.join('');
+      numberB = arrB.join('');
+    } else {
+      numberA = valueA;
+      numberB = valueB;
+    }
+
+    const numA = parseFloat(numberA);
+    const numB = parseFloat(numberB);
 
     if (!isNaN(numA) && !isNaN(numB)) {
       return numA - numB;
